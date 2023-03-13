@@ -1,0 +1,24 @@
+---
+name: Update aws user-agent variable
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - labeled
+      - unlabeled
+      - synchronize
+    branches:
+      - main
+      - stable-*
+    tags:
+      - '*'
+
+jobs:
+  aws-user-agent:
+    uses: abikouo/github_actions/.github/workflows/update_aws_user_agent.yml@main
