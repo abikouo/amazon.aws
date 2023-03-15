@@ -14,5 +14,10 @@ on:
       - 'galaxy.yml'
 
 jobs:
-  update-variable:
-    uses: abikouo/github_actions/.github/workflows/update_aws_user_agent.yml@automate_aws_user_agent_variable
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump context
+        uses: crazy-max/ghaction-dump-context@v2
+  # update-variable:
+  #   uses: abikouo/github_actions/.github/workflows/update_aws_user_agent.yml@automate_aws_user_agent_variable
