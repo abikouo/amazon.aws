@@ -36,6 +36,7 @@ options:
       - Can be one of the options specified in U(http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html#options).
       - If value provided does not exist in the above options, it will be used as a literal string.
       - To use tags as hostnames use the syntax tag:Name=Value to use the hostname Name_Value, or tag:Name to use the value of the Name tag.
+      - Support for jinja2 filters was added in release 9.2.0.
     type: list
     elements: raw
     default: []
@@ -268,6 +269,15 @@ regions:
   - us-east-1
 hostvars_prefix: 'aws_'
 hostvars_suffix: '_ec2'
+
+---
+
+# Define jinja2 filters for hostnames.
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+hostnames:
+  - "tag:Name | replace('test', 'prod')"
 """
 
 import re
@@ -787,6 +797,8 @@ class InventoryModule(AWSInventoryBase):
         hostnames = self.get_option("hostnames")
         strict_permissions = self.get_option("strict_permissions")
         allow_duplicated_hosts = self.get_option("allow_duplicated_hosts")
+
+        print(f"*** hostnames is template = {self.templar.is_template(hostnames)}")
 
         hostvars_prefix = self.get_option("hostvars_prefix")
         hostvars_suffix = self.get_option("hostvars_suffix")
