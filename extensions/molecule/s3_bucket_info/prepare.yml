@@ -1,0 +1,22 @@
+---
+- name: Prepare
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Create a simple s3_bucket
+      amazon.aws.s3_bucket:
+        name: "{{ item }}"
+        state: present
+        versioning: true
+        tags:
+          lowercase spaced: hello cruel world
+          Title Case: Hello Cruel World
+          CamelCase: SimpleCamelCase
+          snake_case: simple_snake_case
+      register: output
+      loop: "{{ testing_buckets }}"
